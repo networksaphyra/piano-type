@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div id="arenaContainer">
+      <button id="generateText">Generate Text</button>
+      <div id="typingArea">Testing Shit...</div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>
