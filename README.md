@@ -1,3 +1,3 @@
 # Very very right opinion:
 
-jQuery >>>>>>>>>>>>>>>>>>>>>>>>>..
+jQuery >>>>>>>>>>>>>>>>>>>>>>>>>
