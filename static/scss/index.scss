@@ -19,7 +19,7 @@ body {
   align-items: center;
 }
 
-#generateText {
+#generateTextButton {
   width: auto;
   height: auto;
   padding: 2em 2em;
@@ -28,7 +28,8 @@ body {
   border: solid 2px #0000D8;
   border-radius: 10px;
   background: #fff;
-  transition: all 0.2s ease-in-out, color 0.1s ease-in;
+  transition: all 0.2s ease-in-out, color 0.13s ease-in;
+  outline: none;
 
   &:hover {
     background: #0000D8;
@@ -45,6 +46,7 @@ body {
 #typingArea {
   width: 80%;
   height: 11em;
+  cursor: none;
 
   #textContainer {
     text-align-last: center;
@@ -53,5 +55,6 @@ body {
     max-height: 100%;
     padding: 2.5em;
     overflow: hidden;
+    outline: none;
   }
 }
