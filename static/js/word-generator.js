@@ -14,8 +14,8 @@ export function generateText(words, wordCount) {
       const position = `word-${word}-position-${pos}`;
       const character = words[index][pos];
 
-      const pElement = createLetterTag(character, position);
-      currentWord.append(pElement);
+      const currentLetter = createLetterTag(character, position);
+      currentWord.append(currentLetter);
     }
     wordList.push(currentWord);
   }
