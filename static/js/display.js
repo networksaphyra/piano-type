@@ -3,6 +3,5 @@ export function displayText(currentWords, textContainer) {
 
     currentWords.forEach((word, index) => {
       textContainer.append(word);
-      if (index < currentWords.length - 1) textContainer.append(" ");
     });
   }

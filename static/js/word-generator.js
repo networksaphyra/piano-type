@@ -11,21 +11,28 @@ export function generateText(words, wordCount) {
     let currentWord = createWordTag(word.toString());
 
     for (let pos = 0; pos < words[index].length; ++pos) {
-      const position = `word-${word}-position-${pos}`;
-      const character = words[index][pos];
+      let position = `word-${word}-position-${pos}`;
+      let character = words[index][pos];
 
       const currentLetter = createLetterTag(character, position);
       currentWord.append(currentLetter);
+
+      if (pos === words[index].length - 1 && word != wordCount - 1) {
+        position = `word-${word}-position-${pos+1}`;
+        character = " ";
+        const spaceLetter = createLetterTag(character, position);
+        currentWord.append(spaceLetter);
+      }
     }
     wordList.push(currentWord);
   }
-
+  
   function createWordTag(word) {
     return $("<span></span>").addClass("word").attr("id", word);
   }
   function createLetterTag(character, position) {
     return $("<span></span>").text(character).addClass("letter").attr("id", position);
   }
-
+  
   return wordList;
 }
