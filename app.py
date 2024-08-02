@@ -10,7 +10,7 @@ def load_words():
 
 words = load_words()
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
   return render_template("base.html")
 
