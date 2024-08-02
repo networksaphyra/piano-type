@@ -44,7 +44,6 @@ body {
 #typingArea {
   width: 80%;
   height: 11em;
-  cursor: none;
 }
 #typingArea #textContainer {
   text-align-last: center;
@@ -54,6 +53,28 @@ body {
   padding: 2.5em;
   overflow: hidden;
   outline: none;
+  caret-color: transparent;
+}
+
+.cursor {
+  position: relative;
+}
+.cursor:before {
+  position: absolute;
+  display: inline-block;
+  left: -2px;
+  content: "";
+  width: 2px;
+  height: 1.2em;
+  background: #000;
+}
+
+.letter.correct {
+  color: #009500;
+}
+.letter.incorrect {
+  color: #a70000;
+  text-decoration: underline;
 }
 
 /*# sourceMappingURL=index.css.map */
