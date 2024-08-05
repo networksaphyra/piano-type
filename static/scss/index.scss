@@ -19,6 +19,11 @@ body {
   align-items: center;
 }
 
+#timer {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+
 #generateTextButton {
   width: auto;
   height: auto;
@@ -49,6 +54,7 @@ body {
 
   #textContainer {
     text-align-last: center;
+    text-align: center;
     font-size: 1.5em;
     line-height: 1.5em;
     max-height: 100%;
@@ -61,15 +67,14 @@ body {
 
 .cursor {
   position: relative;
-
   &:before {
     position: absolute;
-    display: inline-block;
-    left: -2px;
     content: '';
     width: 2px;
     height: 1.2em;
     background: #000;
+    left: 0;
+    top: 0;
   }
 }
 
@@ -81,4 +86,15 @@ body {
     color: #a70000;
     text-decoration: underline;
   }
+  &.temporary {
+    opacity: 0.6;
+  }
+}
+
+.highlight {
+  background-color: #e0e0e0;
+}
+
+.space {
+  background-color: #fff;
 }
