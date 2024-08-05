@@ -11,12 +11,19 @@
     <div id="arenaContainer">
       <button id="generateTextButton">Generate Text</button>
       <div id="typingArea">
-        <div id="textContainer" contenteditable="true">Testing Shit...</div>
+        <div id="textContainer" contenteditable="true">Testing</div>
       </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "socket.io-client": "https://cdn.socket.io/4.7.5/socket.io.esm.min.js"
+        }
+      }
+    </script>
     <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
-
+    <script type="module" src="{{ url_for('static', filename='js/socketio.js') }}"></script>
     {% block body %}
     {% endblock %}
   </body>
