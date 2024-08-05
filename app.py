@@ -22,6 +22,10 @@ def load_words():
 
 words = load_words()
 
+@app.route("/typing_test", methods=["GET"])
+def typingTest():
+   return render_template("base.html")
+
 @app.route("/", methods=["GET"])
 def index():
   return render_template("chat.html")
