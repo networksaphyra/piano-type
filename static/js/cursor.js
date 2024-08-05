@@ -1,8 +1,6 @@
 export function createCursor() {
   let word = 0;
   let position = 0;
-  let currentElement = null;
-  let currentLetter = null;
 
   function incrementWord() {
     word++;
@@ -20,13 +18,32 @@ export function createCursor() {
   function getPosition() {
     return position;
   }
-  
+
   function getWord() {
     return word;
   }
 
+  function getWordElement() {
+    return $(`#${word}`);
+  }
+
+  function getLetterElement() {
+    return $(`#${getId()}`);
+  }
+
   function getId() {
     return `word-${word}-position-${position}`;
+  }
+
+
+  function updateCursorPosition() {
+    $(".cursor").removeClass("cursor");
+    $(`#${getId()}`).addClass("cursor");
+  }
+
+  function updateCursorHighlight() {
+    $(".highlight").removeClass("highlight");
+    $(`#${getWord()}`).addClass("highlight");
   }
 
   return {
@@ -35,6 +52,10 @@ export function createCursor() {
     decrementPosition,
     getPosition,
     getWord,
-    getId
+    getWordElement,
+    getLetterElement,
+    getId,
+    updateCursorPosition,
+    updateCursorHighlight
   };
 }

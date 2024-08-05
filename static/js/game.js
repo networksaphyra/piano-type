@@ -1,6 +1,7 @@
-import { fetchText, generateText } from "./word-generator.js"
+import { fetchText, generateText } from "./wordGenerator.js";
 import { displayText } from "./display.js";
 import { createCursor } from "./cursor.js";
+import { handleKeydown } from "./handleKeydown.js";
 
 export async function runGame() {
   const words = await fetchText();
@@ -16,63 +17,11 @@ export async function runGame() {
     currentWords = generateText(words, 80);
     cursor = createCursor();
     displayText(currentWords, textContainer);
-    updateCursorPosition();
+    cursor.updateCursorPosition();
+    cursor.updateCursorHighlight();
     textContainer.focus();
   }
 
-  textContainer.on("keydown", event => handleKeydown(event));
-
-  function handleKeydown(event) {
-    event.preventDefault();
-    const key = event.key;
-
-    if (key === "Backspace") {
-      handleBackspace();
-    } else if (key.length === 1) {
-      handleCharacter(key);
-    }
-    updateCursorPosition();
-  }
-
-  function handleBackspace() {
-    cursor.decrementPosition();
-    const currentLetterElement = $(`#${cursor.getId()}`);
-    currentLetterElement.removeClass("correct incorrect");
-  }
-
-  function handleSpacebar() {
-    cursor.incrementWord();
-  }
-
-  function handleCharacter(key) {
-    const currentLetterElement = $(`#${cursor.getId()}`);
-    const currentLetter = currentLetterElement.text();
-
-    if (key === currentLetter) {
-      if (key === " ") {
-        handleSpacebar();
-      } else {
-        markCorrect(currentLetterElement);
-        cursor.incrementPosition();
-      }
-
-    } else {
-      markIncorrect(currentLetterElement);
-      cursor.incrementPosition();
-    }
-  }
-
-  function markCorrect(letter) {
-    letter.addClass("correct");
-  }
-
-  function markIncorrect(letter) {
-    letter.addClass("incorrect");
-  }
-
-  function updateCursorPosition() {
-    $(".cursor").removeClass("cursor");
-    $(`#${cursor.getId()}`).addClass("cursor");
-  }
+  textContainer.on("keydown", event => handleKeydown(event, cursor));
 
 }

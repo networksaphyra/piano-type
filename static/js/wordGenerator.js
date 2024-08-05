@@ -6,7 +6,6 @@ export async function fetchText() {
 export function generateText(words, wordCount) {
   let wordList = [];
   for (let word = 0; word < wordCount; ++word) {
-
     let index = Math.floor(Math.random() * words.length);
     let currentWord = createWordTag(word.toString());
 
@@ -18,21 +17,21 @@ export function generateText(words, wordCount) {
       currentWord.append(currentLetter);
 
       if (pos === words[index].length - 1 && word != wordCount - 1) {
-        position = `word-${word}-position-${pos+1}`;
+        position = `word-${word}-position-${pos + 1}`;
         character = " ";
-        const spaceLetter = createLetterTag(character, position);
+        const spaceLetter = createLetterTag(character, position).addClass("space");
         currentWord.append(spaceLetter);
       }
     }
     wordList.push(currentWord);
   }
-  
-  function createWordTag(word) {
-    return $("<span></span>").addClass("word").attr("id", word);
-  }
-  function createLetterTag(character, position) {
-    return $("<span></span>").text(character).addClass("letter").attr("id", position);
-  }
-  
   return wordList;
+}
+
+export function createWordTag(word) {
+  return $("<span></span>").addClass("word").attr("id", word);
+}
+
+export function createLetterTag(character, position) {
+  return $("<span></span>").text(character).addClass("letter").attr("id", position);
 }
