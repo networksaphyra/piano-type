@@ -75,7 +75,7 @@ export class TypingTest {
   }
 
   calculateResults() {
-    const timeElapsed = (this.endTime - this.startTime) / 1000 / 60;
+    const timeElapsed = this.settings.timeLimit / 60;
     const wpm = Math.round((this.totalChars / 5) / timeElapsed);
     const accuracy = Math.round((this.correctChars / this.totalChars) * 100);
     return { wpm, accuracy };
