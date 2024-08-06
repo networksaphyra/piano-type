@@ -49,8 +49,10 @@ body {
 #typingArea {
   width: 80%;
   height: 11em;
+  white-space: pre-wrap;
 }
 #typingArea #textContainer {
+  display: none;
   text-align-last: center;
   text-align: center;
   font-size: 1.5em;
