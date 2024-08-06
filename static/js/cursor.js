@@ -1,61 +1,65 @@
-export function createCursor() {
-  let word = 0;
-  let position = 0;
-
-  function incrementWord() {
-    word++;
-    position = 0;
+// Cursor.js
+export class Cursor {
+  constructor() {
+    this.position = 0;
+    this.word = 0;
+    this.config = {
+      cursorClass: "cursor",
+      highlightClass: "highlight",
+      idPrefix: "word-",
+      idSeparator: "-position-",
+    };
   }
 
-  function incrementPosition() {
-    position++;
+  incrementWord() {
+    this.word++;
+    this.position = 0;
   }
 
-  function decrementPosition() {
-    position = Math.max(0, position - 1);
+  incrementPosition() {
+    this.position++;
   }
 
-  function getPosition() {
-    return position;
+  decrementWord() {
+    this.position = 0;
   }
 
-  function getWord() {
-    return word;
+  decrementPosition() {
+    this.position = Math.max(0, this.position - 1);
   }
 
-  function getWordElement() {
-    return $(`#${word}`);
+  getPosition() {
+    return this.position;
   }
 
-  function getLetterElement() {
-    return $(`#${getId()}`);
+  getWord() {
+    return this.word;
   }
 
-  function getId() {
-    return `word-${word}-position-${position}`;
+  getLetterElement() {
+    return $(`#${this.getId()}`);
   }
 
-
-  function updateCursorPosition() {
-    $(".cursor").removeClass("cursor");
-    $(`#${getId()}`).addClass("cursor");
+  getWordElement() {
+    return $(`#${this.word}`);
   }
 
-  function updateCursorHighlight() {
-    $(".highlight").removeClass("highlight");
-    $(`#${getWord()}`).addClass("highlight");
+  getId() {
+    return `${this.config.idPrefix}${this.word}${this.config.idSeparator}${this.position}`;
   }
 
-  return {
-    incrementWord,
-    incrementPosition,
-    decrementPosition,
-    getPosition,
-    getWord,
-    getWordElement,
-    getLetterElement,
-    getId,
-    updateCursorPosition,
-    updateCursorHighlight
-  };
+  updateCursorPosition() {
+    $(`.${this.config.cursorClass}`).removeClass(this.config.cursorClass);
+    this.getLetterElement().addClass(this.config.cursorClass);
+  }
+
+  updateCursorHighlight() {
+    $(`.${this.config.highlightClass}`).removeClass(this.config.highlightClass);
+    this.getWordElement().addClass(this.config.highlightClass);
+  }
+
+  reset() {
+    this.word = 0;
+    this.position = 0;
+  }
 }
