@@ -24,6 +24,9 @@ export class KeyHandler {
       if (key === "Backspace") {
         this.handleMetaBackspace();
         event.preventDefault();
+        this.typingTest.cursor.updateCursorPosition();
+        this.typingTest.cursor.updateCursorHighlight();
+        this.typingTest.updateStats(key);
       }
       return;
     }
