@@ -4,8 +4,10 @@ export class Cursor {
     this.position = 0;
     this.word = 0;
     this.config = {
-      cursorClass: "cursor",
-      highlightClass: "highlight",
+      classes: {
+        cursorClass: "cursor",
+        highlightClass: "highlight",
+      },
       idPrefix: "word-",
       idSeparator: "-position-",
     };
