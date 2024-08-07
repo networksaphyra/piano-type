@@ -1,7 +1,7 @@
 export class Settings { 
   constructor() {
     this.wordCount = 400;
-    this.timeLimit = 50;
+    this.timeLimit = 5;
     this.theme = "Light";
   }
 

@@ -4,7 +4,7 @@ $(document).ready(main);
 
 function main() {
   console.log("here");
-  
-  const typingTest = new TypingTest();
+  const typingTest = new TypingTest(); 
   typingTest.initialize();
+  $("#generateTextButton").on("click", () => typingTest.generateNewTest());
 }

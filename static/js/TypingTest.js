@@ -19,13 +19,11 @@ export class TypingTest {
 
   async initialize() {
     this.words = await fetchText();
-    this.generateNewTest();
     this.bindEvents();
   }
 
   bindEvents() {
     $(document).on('keydown', (event) => this.keyHandler.handleKeydown(event));
-    $('#generateTextButton').click(() => this.generateNewTest());
     console.log("binding");
   }
 
@@ -52,6 +50,7 @@ export class TypingTest {
     this.endTime = new Date();
     const results = this.calculateResults();
     this.displayResults(results);
+    $("#textContainer").css("display", "none");
   }
 
   resetStats() {
@@ -84,7 +83,6 @@ export class TypingTest {
   displayResults(results) {
     let resultText = `WPM: ${results.wpm}, Accuracy: ${results.accuracy}%`;
     console.log(resultText);
-    alert(resultText)
-    this.generateNewTest();
+    alert(resultText);
   }
 }
