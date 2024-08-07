@@ -1,4 +1,3 @@
-// Cursor.js
 export class Cursor {
   constructor() {
     this.position = 0;

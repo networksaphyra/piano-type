@@ -1,7 +1,7 @@
-import { Cursor } from './Cursor.js';
-import { Settings } from './Settings.js';
-import { generateText, fetchText } from './WordGenerator.js';
-import { KeyHandler } from './KeyHandler.js';
+import { Cursor } from "./Cursor.js";
+import { Settings } from "./Settings.js";
+import { generateText, fetchText } from "./WordGenerator.js";
+import { KeyHandler } from "./KeyHandler.js";
 
 export class TypingTest {
   constructor() {
@@ -15,6 +15,7 @@ export class TypingTest {
     this.correctChars = 0;
     this.totalChars = 0;
     this.currentWordIndex = 0;
+    this.timerId = null;
   }
 
   async initialize() {
@@ -23,34 +24,38 @@ export class TypingTest {
   }
 
   bindEvents() {
-    $(document).on('keydown', (event) => this.keyHandler.handleKeydown(event));
+    $(document).on("keydown", (event) => this.keyHandler.handleKeydown(event));
     console.log("binding");
   }
 
   generateNewTest() {
-    const textContainer = $('#textContainer');
+    const textContainer = $("#textContainer");
     textContainer.empty();
     textContainer.css("display", "block");
     const generatedText = generateText(this.words, this.settings.wordCount);
-    generatedText.forEach(word => textContainer.append(word));
+    generatedText.forEach((word) => textContainer.append(word));
     this.cursor.reset();
     this.cursor.updateCursorPosition();
     this.cursor.updateCursorHighlight();
     this.resetStats();
+    if (this.timerId) clearTimeout(this.timerId);
   }
 
   startTest() {
     if (!this.startTime) {
       this.startTime = new Date();
-      setTimeout(() => this.endTest(), this.settings.timeLimit * 1000);
+      this.timerId = setTimeout(() => this.endTest(), this.settings.timeLimit * 1000);
     }
   }
 
   endTest() {
-    this.endTime = new Date();
-    const results = this.calculateResults();
-    this.displayResults(results);
-    $("#textContainer").css("display", "none");
+    if (!this.endTime) {
+      this.endTime = new Date();
+      clearTimeout(this.timerId);
+      const results = this.calculateResults();
+      this.displayResults(results);
+      $("#textContainer").css("display", "none");
+    }
   }
 
   resetStats() {
@@ -65,17 +70,20 @@ export class TypingTest {
     if (!this.startTime) this.startTest();
 
     const currentWord = this.cursor.getWordElement().text();
-    const currentChar = currentWord[this.cursor.getPosition() - 1];
+    const currentPosition = this.cursor.getPosition();
+    const currentChar = currentWord[currentPosition];
 
-    if (key === currentChar) {
-      this.correctChars++;
+    if (currentChar) {
+      this.totalChars++;
+      if (key === currentChar) {
+        this.correctChars++;
+      }
     }
-    this.totalChars++;
   }
 
   calculateResults() {
-    const timeElapsed = this.settings.timeLimit / 60;
-    const wpm = Math.round((this.totalChars / 5) / timeElapsed);
+    const timeElapsed = (this.endTime - this.startTime) / 1000 / 60;
+    const wpm = Math.round(this.totalChars / 5 / timeElapsed);
     const accuracy = Math.round((this.correctChars / this.totalChars) * 100);
     return { wpm, accuracy };
   }

@@ -1,4 +1,4 @@
-import { createLetterTag } from "./wordGenerator.js";
+import { createLetterTag } from "./WordGenerator.js";
 
 export class KeyHandler {
   constructor(typingTest) {
@@ -8,46 +8,63 @@ export class KeyHandler {
         temporary: "temporary",
         correct: "correct",
         incorrect: "incorrect",
-        space: "space"
+        space: "space",
       },
       separators: {
-        idSeparator: "-"
-      }
+        idSeparator: "-",
+      },
     };
   }
 
   handleKeydown(event) {
     const { key, metaKey, ctrlKey, altKey } = event;
     const isModifierKey = metaKey || ctrlKey || altKey;
-
+    const ignoredKeys = ['Shift', 'Control', 'Alt', 'CapsLock', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+    
     if (isModifierKey) {
       if (key === "Backspace") {
-        this.handleMetaBackspace();
         event.preventDefault();
+        this.handleMetaBackspace();
         this.typingTest.cursor.updateCursorPosition();
         this.typingTest.cursor.updateCursorHighlight();
-        this.typingTest.updateStats(key);
       }
+      return;
+    }
+
+    if (ignoredKeys.includes(key) || isModifierKey) {
       return;
     }
 
     event.preventDefault();
 
     const keyHandlers = {
-      "Backspace": () => this.handleBackspace(),
-      " ": () => this.handleSpacebar(),
-      "default": () => this.handleCharacter(key)
+      Backspace: () => this.handleBackspace(),
+      " ": () => this.handleSpacebar(key),
+      default: () => this.handleCharacter(key),
     };
 
     (keyHandlers[key] || keyHandlers["default"])();
+    console.log("spacebar");
     this.typingTest.cursor.updateCursorPosition();
     this.typingTest.cursor.updateCursorHighlight();
-    this.typingTest.updateStats(key);
   }
 
-  handleSpacebar() {
+  handleSpacebar(key) {
     const { cursor } = this.typingTest;
     if (cursor.getPosition() > 0) {
+      const currentWord = cursor.getWordElement().text().trim();
+      const typedWord = cursor
+        .getWordElement()
+        .find(
+          `.${this.config.classes.correct}, .${this.config.classes.incorrect}`
+        )
+        .text();
+
+      if (currentWord === typedWord) {
+        this.typingTest.correctChars++; 
+      }
+      this.typingTest.totalChars++; 
+
       cursor.incrementWord();
       this.typingTest.currentWordIndex++;
     }
@@ -55,12 +72,20 @@ export class KeyHandler {
 
   handleBackspace() {
     const { cursor } = this.typingTest;
-    cursor.decrementPosition();
-    const currentLetterElement = cursor.getLetterElement();
-    if (currentLetterElement.hasClass(this.config.classes.temporary)) {
-      this.removeTemporaryLetter(currentLetterElement);
-    } else {
-      currentLetterElement.removeClass(`${this.config.classes.correct} ${this.config.classes.incorrect}`);
+    if (cursor.getPosition() > 0) {
+      cursor.decrementPosition();
+      const currentLetterElement = cursor.getLetterElement();
+      if (currentLetterElement.hasClass(this.config.classes.temporary)) {
+        this.removeTemporaryLetter(currentLetterElement);
+      } else {
+        currentLetterElement.removeClass(
+          `${this.config.classes.correct} ${this.config.classes.incorrect}`
+        );
+        this.typingTest.totalChars--;
+        if (currentLetterElement.hasClass(this.config.classes.correct)) {
+          this.typingTest.correctChars--;
+        }
+      }
     }
   }
 
@@ -71,9 +96,15 @@ export class KeyHandler {
 
     currentWordElement.children(`.${this.config.classes.temporary}`).remove();
     currentWordElement.children(`.${this.config.classes.space}`).remove();
-    currentWordElement.children().removeClass(`${this.config.classes.correct} ${this.config.classes.incorrect}`)
+    currentWordElement
+      .children()
+      .removeClass(
+        `${this.config.classes.correct} ${this.config.classes.incorrect}`
+      );
 
-    const id = `word-${cursor.getWord()}-position-${cursor.getWordElement().text().length}`
+    const id = `word-${cursor.getWord()}-position-${
+      cursor.getWordElement().text().length
+    }`;
     const spaceElement = createLetterTag(" ", id).addClass("space");
 
     currentWordElement.append(spaceElement);
@@ -85,27 +116,27 @@ export class KeyHandler {
     const { cursor } = this.typingTest;
     const currentLetterElement = cursor.getLetterElement();
     if (currentLetterElement.hasClass(this.config.classes.space)) {
+      if ($(".temporary").length > 10) return;
       this.insertTemporaryLetter(key, cursor);
     } else {
-      this.markLetterStatus(currentLetterElement, key === currentLetterElement.text());
+      this.markLetterStatus(
+        currentLetterElement,
+        key === currentLetterElement.text()
+      );
     }
     cursor.incrementPosition();
+    this.typingTest.updateStats(key);
   }
 
   insertTemporaryLetter(key, cursor) {
     const currentLetterElement = cursor.getLetterElement();
     const position = currentLetterElement.attr("id");
-    const temporaryLetter = createLetterTag(key, position).addClass(this.config.classes.temporary);
+    const temporaryLetter = createLetterTag(key, position).addClass(
+      this.config.classes.temporary
+    );
     currentLetterElement.before(temporaryLetter);
     this.updateElementId(currentLetterElement, 1);
     this.markLetterStatus(temporaryLetter, false);
-  }
-
-  createTemporaryLetter(key, cursor) {
-    const currentLetterElement = cursor.getLetterElement();
-    const position = currentLetterElement.attr("id");
-    this.updateElementId(currentLetterElement, +1);
-    return createLetterTag(key, position).addClass(this.config.classes.temporary);
   }
 
   removeTemporaryLetter(temporaryLetterElement) {
@@ -114,12 +145,19 @@ export class KeyHandler {
   }
 
   markLetterStatus(element, isCorrect) {
-    element.addClass(isCorrect ? this.config.classes.correct : this.config.classes.incorrect);
+    element.addClass(
+      isCorrect ? this.config.classes.correct : this.config.classes.incorrect
+    );
   }
 
   updateElementId(element, delta) {
-    const idParts = element.attr("id").split(this.config.separators.idSeparator);
+    const idParts = element
+      .attr("id")
+      .split(this.config.separators.idSeparator);
     const newPosition = parseInt(idParts.pop()) + delta;
-    element.attr("id", [...idParts, newPosition].join(this.config.separators.idSeparator));
+    element.attr(
+      "id",
+      [...idParts, newPosition].join(this.config.separators.idSeparator)
+    );
   }
 }
