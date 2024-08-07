@@ -85,6 +85,6 @@ export class TypingTest {
     let resultText = `WPM: ${results.wpm}, Accuracy: ${results.accuracy}%`;
     console.log(resultText);
     alert(resultText)
-    generateNewTest();
+    this.generateNewTest();
   }
 }

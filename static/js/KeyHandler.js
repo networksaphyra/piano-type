@@ -68,8 +68,15 @@ export class KeyHandler {
     console.log("entered meta backspace...");
     const { cursor } = this.typingTest;
     const currentWordElement = cursor.getWordElement();
+
     currentWordElement.children(`.${this.config.classes.temporary}`).remove();
-    currentWordElement.children().removeClass(`${this.config.classes.correct} ${this.config.classes.incorrect}`);
+    currentWordElement.children(`.${this.config.classes.space}`).remove();
+    currentWordElement.children().removeClass(`${this.config.classes.correct} ${this.config.classes.incorrect}`)
+
+    const id = `word-${cursor.getWord()}-position-${cursor.getWordElement().text().length}`
+    const spaceElement = createLetterTag(" ", id).addClass("space");
+
+    currentWordElement.append(spaceElement);
     cursor.decrementWord();
     this.typingTest.currentWordIndex--;
   }

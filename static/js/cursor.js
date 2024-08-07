@@ -41,7 +41,7 @@ export class Cursor {
   }
 
   getWordElement() {
-    return $(`#${this.word}`);
+    return $(`#word-${this.word}`);
   }
 
   getId() {
