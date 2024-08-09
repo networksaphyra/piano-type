@@ -1,3 +1,2 @@
-# Very very right opinion:
-
-jQuery >>>>>>>>>>>>>>>>>>>>>>>>>
+# Piano Type
+An online typing game in the works.
